@@ -5,12 +5,12 @@ use App\Http\Controllers\Auth\RegisterController;
 
 
 // Route untuk menampilkan form registrasi
-Route::get('/register', function () {
-    return view('daftar'); // Nama file view register.blade.php
+Route::get('/daftar', function () {
+    return view('daftar'); // Nama file view daftar.blade.php
 });
 
 // Route untuk memproses form registrasi
-Route::post('/register/submit', [RegisterController::class, 'submit'])->name('register.submit');
+Route::post('/daftar/submit', [RegisterController::class, 'submit'])->name('register.submit');
 
 use App\Http\Controllers\Auth\LoginController;
 
@@ -27,13 +27,17 @@ Route::get('/dashboard', function () {
 Route::get('/daftar', function () {
     return view('daftar');
 });
-
-
-
 use App\Http\Controllers\PickupController;
+
+Route::get('/admin/pickup', [PickupController::class, 'adminPickup'])->name('admin.pickup')->middleware('auth');
+Route::put('/admin/pickup/{id}/update', [PickupController::class, 'updateStatus'])->name('pickup.updateStatus')->middleware('auth');
+
+
+
 
 Route::get('/pickup', [PickupController::class, 'index'])->name('pickup')->middleware('auth');
 Route::post('/pickup/store', [PickupController::class, 'store'])->name('pickup.store')->middleware('auth');
+Route::put('/pickup/{id}/update-status', [PickupController::class, 'updateStatus'])->name('pickup.updateStatus')->middleware('auth');
 
 Route::get('/', function () {
     return view('tentangKami');

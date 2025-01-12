@@ -55,7 +55,7 @@ class PickupController extends Controller
     }
 
     // Mengupdate data pickup
-    public function update(Request $request, $id)
+    public function updateStatus(Request $request, $id)
     {
         try {
             $pickup = pickup::findOrFail($id);
@@ -82,8 +82,7 @@ class PickupController extends Controller
     public function adminPickup()
     {
         $pickups = Pickup::all();
-        $dropoffs = \App\Models\Dropoff::all();
-        return view('admin.dropoff', compact('pickups', 'dropoffs'));
+        return view('admin.pickup', compact('pickups'));
     }
 
     // Menghapus data pickup

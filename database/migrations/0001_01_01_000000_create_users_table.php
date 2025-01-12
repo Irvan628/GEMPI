@@ -24,6 +24,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->integer('points')->default(0); // Kolom points
+            $table->string('role')->default('user'); // Kolom role
             $table->rememberToken();
             $table->timestamps();
             

@@ -115,7 +115,7 @@
                 <input type="password" name="password" class="form-control" placeholder="Password" required>
             </div>
             <button type="submit" class="btn login-button w-100">Login</button>
-            <p class="register-link">Belum Punya Akun? <a href="daftar.html">Daftar Disini</a></p>
+            <p class="register-link">Belum Punya Akun? <a href="daftar">Daftar Disini</a></p>
         </form>
         
     </div>

@@ -12,7 +12,7 @@ class LoginController extends Controller
     {
         // Validasi input
         $request->validate([
-            'email' => 'required|email',
+            'email' => 'required|email', 
             'password' => 'required',
         ]);
 
@@ -20,8 +20,14 @@ class LoginController extends Controller
         $credentials = $request->only('email', 'password');
 
         if (Auth::attempt($credentials)) {
-            // Redirect ke dashboard jika login berhasil
-            return redirect()->intended('dashboard');
+            // Cek role user dan redirect sesuai role
+            $user = Auth::user();
+            
+            if ($user->role === 'admin') {
+                return redirect()->intended('/admin/dashboard');
+            } else {
+                return redirect()->intended('/dashboard');
+            }
         }
 
         // Jika gagal, kembalikan ke halaman login dengan pesan error
@@ -29,6 +35,7 @@ class LoginController extends Controller
             'email' => 'Email atau password salah.',
         ])->onlyInput('email');
     }
+
     public function logout(Request $request)
     {
         Auth::logout();

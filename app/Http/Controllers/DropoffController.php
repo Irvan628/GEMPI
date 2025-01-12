@@ -9,13 +9,14 @@ use Illuminate\Support\Facades\Auth;
 class DropoffController extends Controller
 {
     function tampil(){
-        return view("Dropoff");
+        return view("dropoff"); // Menampilkan view dropoff.blade.php
     }
+    
     function submit(Request $request){
         try {
             $dropoff = new Dropoff();
             $dropoff->name = Auth::user()->name;
-            $dropoff->phone_number = Auth::user()->phone; // Disesuaikan dengan fillable di model
+            $dropoff->phone_number = Auth::user()->phone;
             $dropoff->address = Auth::user()->address;
             $dropoff->point = $request->point;
             $dropoff->status = 'pending';
@@ -30,20 +31,20 @@ class DropoffController extends Controller
     public function adminDropoff()
     {
         $dropoffs = Dropoff::all();
-        return view('admin.dropoff', compact('dropoffs'));
+        return view('admin.dropoff', compact('dropoffs')); 
     }
+
     public function updateStatus(Request $request, $id)
     {
         try {
             $dropoff = Dropoff::findOrFail($id);
             $dropoff->status = $request->status;
             
-            // Update point berdasarkan status
-            if ($request->status == 'succes') {
-                // Point tetap sama jika diterima
+            if ($request->status == 'success') {
+                // Point tetap jika diterima
                 $dropoff->point = $dropoff->point;
             } else if ($request->status == 'failed') {
-                // Point menjadi 0 jika ditolak
+                // Point menjadi 0 jika ditolak  
                 $dropoff->point = 0;
             }
             

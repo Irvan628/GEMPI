@@ -87,13 +87,13 @@
     <!-- Sidebar -->
     <div class="sidebar">
         <h3 class="text-center text-white mb-4">Admin Panel</h3>
-        <a href="{{ route('admin.dropoff') }}" class="active">Dropoff</a>
-        <a href="{{ route('admin.pickup') }}">Pickup</a>
+        <a href="{{ route('admin.dropoff') }}">Dropoff</a>
+        <a href="{{ route('admin.pickup') }}" class="active">Pickup</a>
     </div>
 
     <!-- Main Content -->
     <div class="main-content">
-        <div class="header-text">Riwayat Transaksi Dropoff</div>
+        <div class="header-text">Riwayat Transaksi Pickup</div>
         
         <div class="table-container">
             <table class="table table-bordered">
@@ -103,30 +103,32 @@
                         <th>Nama</th>
                         <th>Nomor Telepon</th>
                         <th>Alamat</th>
-                        <th>Nominal</th>
+                        <th>Tanggal Penjemputan</th>
+                        <th>Waktu Penjemputan</th>
                         <th>Status</th>
                         <th>Aksi</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($dropoffs as $index => $dropoff)
+                    @foreach($pickups as $index => $pickup)
                     <tr>
                         <td>{{ $index + 1 }}</td>
-                        <td>{{ $dropoff->name }}</td>
-                        <td>{{ $dropoff->phone_number }}</td>
-                        <td>{{ $dropoff->address }}</td>
-                        <td>{{ $dropoff->point }}</td>
-                        <td>{{ $dropoff->status }}</td>
+                        <td>{{ $pickup->name }}</td>
+                        <td>{{ $pickup->phone_number }}</td>
+                        <td>{{ $pickup->address }}</td>
+                        <td>{{ $pickup->pickup_date }}</td>
+                        <td>{{ $pickup->pickup_time }}</td>
+                        <td>{{ $pickup->status }}</td>
                         <td>
-                            @if($dropoff->status == 'pending')
-                            <form action="{{ route('dropoff.updateStatus', $dropoff->id) }}" method="POST" style="display:inline;">
+                            @if($pickup->status == 'pending')
+                            <form action="{{ route('pickup.updateStatus', $pickup->id) }}" method="POST" style="display:inline;">
                                 @csrf
                                 @method('PUT')
                                 <button type="submit" name="status" value="success" class="btn btn-accept btn-sm">Terima</button>
                                 <button type="submit" name="status" value="failed" class="btn btn-reject btn-sm">Tolak</button>
                             </form>
                             @else
-                                {{ $dropoff->status }}
+                                {{ $pickup->status }}
                             @endif
                         </td>
                     </tr>
