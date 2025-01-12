@@ -17,6 +17,8 @@ return new class extends Migration {
             $table->string('name'); // Nama
             $table->string('phone_number'); // Nomor Telepon
             $table->text('address'); // Alamat
+            $table->date('pickup_date'); // Tanggal Penjemputan
+            $table->time('pickup_time'); // Waktu Penjemputan
             $table->enum('status', ['pending', 'success', 'failed'])->default('pending'); // Status
             $table->timestamps(); // Created_at & Updated_at
         });

@@ -1,3 +1,7 @@
+@if(!Auth::check())
+    <script>window.location = "{{ route('login') }}";</script>
+@endif
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -76,18 +80,6 @@
             margin-right: 5px;
         }
 
-        .upload-container {
-            background-color: #F5F5F5;
-            text-align: center;
-            padding: 15px;
-            border-radius: 10px;
-            font-size: 14px;
-            color: #555;
-            border: 2px dashed #8BA893;
-            cursor: pointer;
-            margin-bottom: 20px;
-        }
-
         .info-row {
             display: flex;
             justify-content: space-between;
@@ -131,119 +123,108 @@
 
         <hr>
 
-        <!-- Waste Items -->
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/plastik.png" alt="Plastic Icon">
-                Plastik
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="plastik">
-                <span>kg</span>
-            </div>
-        </div>
-
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/kertas.png" alt="kertas Icon">
-                Kertas
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value ="0" min="0" data-type="kertas">
-                <span>kg</span>
-            </div>
-        </div>
-
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/alumunium.png" alt="Alumunium Icon">
-                Alumunium
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="alumunium">
-                <span>kg</span>
-            </div>
-        </div>
-
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/besi.png" alt="Besi Icon">
-                Besi
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="besi">
-                <span>kg</span>
-            </div>
-        </div>
-
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/botol.png" alt="Botol Icon">
-                Botol Plastik
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="botol">
-                <span>kg</span>
-            </div>
-        </div>
-
-        <div class="result">
-            <p id="total-coins">Total Koin: 0</p>
-        </div>
-
-        <div class="upload-container" onclick="document.getElementById('myFile').click();">
-            <div id="upload-text">+</div>
-            <div id="upload-instruction">Upload foto sampahmu disini</div>
-            <img id="preview" class="preview-image" alt="Pratinjau Gambar" style="display:none;">
-        </div>
-
-        <input type="file" id="myFile" name="filename" accept="image/*" onchange="handleFileUpload(event)" style="display:none;">
-
-        <script>
-            function handleFileUpload(event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('preview');
-                const uploadText = document.getElementById('upload-text');
-                const uploadInstruction = document.getElementById('upload-instruction');
-
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = "block";
-                        uploadText.style.display = "none";
-                        uploadInstruction.style.display = "none";
-                    }
-                    reader.readAsDataURL(file);
-                }
-            }
-        </script>
-
-        <div class="info-row">
-            <div class="info-box">
-                <div class="info-title">Alamat Penjemputan</div>
-                <div class="info-details">Bryan Bagaskara</div>
-                <div class="info-details">082209785456</div>
-                <div class="info-details">Kencana Loka, Jl. Ahmad Yani, Blok A7 No. 10</div>
-            </div>
-
-            <div class="info-box">
-                <div class="info-title">Tanggal Penjemputan</div>
-                <div class="info-details">
-                    <input type="date" id="tanggal-penjemputan" name="tanggal-penjemputan" class="form-control">
+        <form id="dropoffForm" action="{{ route('dropoff.submit') }}" method="POST">
+            @csrf
+            <!-- Waste Items -->
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/plastik.png" alt="Plastic Icon">
+                    Plastik
                 </div>
-                <div class="info-title mt-3">Waktu Penjemputan</div>
-                <div class="info-details">
-                    <input type="time" id="waktu-penjemputan" name="waktu-penjemputan" class="form-control">
+                <div class="weight-input-group">
+                    <input type="number" class="weight-input" value="0" min="0" data-type="plastik">
+                    <span>kg</span>
                 </div>
             </div>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/kertas.png" alt="kertas Icon">
+                    Kertas
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" class="weight-input" value ="0" min="0" data-type="kertas">
+                    <span>kg</span>
+                </div>
+            </div>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/alumunium.png" alt="Alumunium Icon">
+                    Alumunium
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" class="weight-input" value="0" min="0" data-type="alumunium">
+                    <span>kg</span>
+                </div>
+            </div>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/besi.png" alt="Besi Icon">
+                    Besi
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" class="weight-input" value="0" min="0" data-type="besi">
+                    <span>kg</span>
+                </div>
+            </div>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/botol.png" alt="Botol Icon">
+                    Botol Plastik
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" class="weight-input" value="0" min="0" data-type="botol">
+                    <span>kg</span>
+                </div>
+            </div>
+
+            <input type="hidden" name="point" id="point" value="0">
+
+            <div class="result">
+                <p id="total-coins">Total Koin: 0</p>
+            </div>
+
+            <div class="info-row">
+                <div class="info-box">
+                    <div class="info-title">Alamat Penjemputan</div>
+                    <div class="info-details">{{ Auth::user()->name }}</div>
+                    <div class="info-details">{{ Auth::user()->phone }}</div>
+                    <div class="info-details">{{ Auth::user()->address }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">Tanggal Penjemputan</div>
+                    <div class="info-details">
+                        <input type="date" id="tanggal-penjemputan" name="tanggal-penjemputan" class="form-control">
+                    </div>
+                    <div class="info-title mt-3">Waktu Penjemputan</div>
+                    <div class="info-details">
+                        <input type="time" id="waktu-penjemputan" name="waktu-penjemputan" class="form-control">
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <button type="button" class="btn confirm" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                Lanjutkan Transaksi
+            </button>
+        </form>
+
+        @if(session('success'))
+        <div class="alert alert-success">
+            {{ session('success') }}
         </div>
+        @endif
 
-        <hr>
-
-        <button type="button" class="btn confirm" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-            Lanjutkan Transaksi
-        </button>
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
 
         <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -280,11 +261,20 @@
                 totalCoins += weight * (conversionRates[type] || 0);
             });
             document.getElementById('total-coins').innerText = `Total Koin: ${totalCoins.toLocaleString()} koin`;
+            
+            // Simpan total koin ke input hidden untuk dikirim ke controller
+            document.getElementById('point').value = totalCoins;
         }
 
         const inputs = document.querySelectorAll('.weight-input');
         inputs.forEach(input => {
             input.addEventListener('input', calculateTotalCoins);
+        });
+
+        // Ketika tombol Ya di modal diklik
+        document.querySelector('.btn-success').addEventListener('click', function() {
+            // Submit form ke controller
+            document.getElementById('dropoffForm').submit();
         });
 
         calculateTotalCoins();

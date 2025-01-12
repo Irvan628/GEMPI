@@ -1,3 +1,7 @@
+@if(!Auth::check())
+    <script>window.location = "/login";</script>
+@endif
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,6 +176,23 @@
                 padding: 15px;
             }
         }
+
+        .logout-btn {
+            background-color: #dc3545;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        .logout-btn:hover {
+            background-color: #c82333;
+        }
     </style>
 </head>
 <body>
@@ -189,7 +210,7 @@
         <div class="mt-6 flex justify-start p-6 items-center space-x-3">
             <img src="img/logo.png" alt="Logo" class="w-12 h-12">
             <div>
-                <p class="text-2xl text-black font-bold">Halo, {{ namaUser }}!</p>
+                <p class="text-2xl text-black font-bold">Halo, {{ Auth::user()->name }}!</p>
                 <p class="text-sm text-black mt-2">Yuk daur ulang sampahmu hari ini!</p>
             </div>
         </div>
@@ -198,7 +219,7 @@
             <div class="bg-lime-500 border-lime-900 p-4 flex items-center rounded w-full">
                 <img src="img/coin.png" alt="Coin Icon" class="h-12 w-12">
                 <div class="ml-4">
-                    <p class="text-lg text-black font-bold">{{ poinUser }} Points</p>
+                    <p class="text-lg text-black font-bold">{{ Auth::user()->dropoffs ? Auth::user()->dropoffs->sum('point') : 0 }} Points</p>
                     <button 
                         class="bg-green-700 text-white active:text-green-500 rounded-lg px-4 py-2 mt-2 font-bold"
                         onclick="window.location.href='{{ url('reedem') }}'">
@@ -228,6 +249,12 @@
                     <button class="text-sm text-black active:text-green-500 hover:underline" onclick="window.location.href='{{ url('akun-setting ') }}'">Akun dan Setting</button>
                 </div>
             </div>
+            <form method="POST" action="{{ route('logout') }}">
+                @csrf
+                <button type="submit" class="logout-btn">
+                    Logout
+                </button>
+            </form>
         </div>
     </div>
 

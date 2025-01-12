@@ -146,7 +146,7 @@
     <div class="mt-6 flex justify-start p-6 items-center space-x-3">
         <img src="img/logo.png" alt="Logo" class="w-12 h-12">
         <div>
-            <p class="text-2xl text-black font-bold">Halo, Irvan!</p>
+            <p class="text-2xl text-black font-bold">Halo, {{ Auth::user()->name }}!</p>
             <p class="text-sm text-black mt-2">Yuk daur ulang sampahmu hari ini!</p>
         </div>
     </div>
@@ -183,7 +183,7 @@
         <div class="flex items-center space-x-4">
             <img src="img/user.png" alt="User Icon" class="h-12 w-12">
             <div>
-                <p class="text-black font-bold">Irvan Nurfauzan</p>
+                <p class="text-black font-bold">{{ Auth::user()->name }}</p>
                 <button class="text-sm  text-black active:text-green-500 hover:underline" onclick="window.location.href='{{ url('akun-setting') }}'">Akun dan Setting</button>
             </div>
         </div>
@@ -192,139 +192,140 @@
 
 <div class="main-content">
     <div class="container">
-        <div class="header-text">Rincian Sampah</div>
-        <div class="instruction-text">Pilih jenis dan masukkan perkiraan berat sampah yang akan di drop off.</div>
+        <form action="{{ route('pickup.store') }}" method="POST">
+            @csrf
+            <div class="header-text">Rincian Sampah</div>
+            <div class="instruction-text">Pilih jenis dan masukkan perkiraan berat sampah yang akan di drop off.</div>
 
-        <hr>
+            <hr>
 
-        <!-- Waste Items -->
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/plastik.png" alt="Plastic Icon">
-                Plastik
+            <!-- Waste Items -->
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/plastik.png" alt="Plastic Icon">
+                    Plastik
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" name="plastik" class="weight-input" value="0" min="0" data-type="plastik">
+                    <span>kg</span>
+                </div>
             </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="plastik">
-                <span>kg</span>
-            </div>
-        </div>
 
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/kertas.png" alt="kertas Icon">
-                Kertas
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/kertas.png" alt="kertas Icon">
+                    Kertas
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" name="kertas" class="weight-input" value ="0" min="0" data-type="kertas">
+                    <span>kg</span>
+                </div>
             </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value ="0" min="0" data-type="kertas">
-                <span>kg</span>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/alumunium.png" alt="Alumunium Icon">
+                    Alumunium
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" name="alumunium" class="weight-input" value="0" min="0" data-type="alumunium">
+                    <span>kg</span>
+                </div>
             </div>
-        </div>
 
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/alumunium.png" alt="Alumunium Icon">
-                Alumunium
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/besi.png" alt="Besi Icon">
+                    Besi
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" name="besi" class="weight-input" value="0" min="0" data-type="besi">
+                    <span>kg</span>
+                </div>
             </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="alumunium">
-                <span>kg</span>
+
+            <div class="item-row">
+                <div class="item-title">
+                    <img src="img/botol.png" alt="Botol Icon">
+                    Botol Plastik
+                </div>
+                <div class="weight-input-group">
+                    <input type="number" name="botol" class="weight-input" value="0" min="0" data-type="botol">
+                    <span>kg</span>
+                </div>
             </div>
-        </div>
 
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/besi.png" alt="Besi Icon">
-                Besi
+            <div class="result">
+                <p id="total-coins">Total Koin: 0</p>
             </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="besi">
-                <span>kg</span>
+
+            <div class="upload-container" onclick="document.getElementById('myFile').click();">
+                <div id="upload-text">+</div>
+                <div id="upload-instruction">Upload foto sampahmu disini</div>
+                <img id="preview" class="preview-image" alt="Pratinjau Gambar" style="display:none;">
             </div>
-        </div>
 
-        <div class="item-row">
-            <div class="item-title">
-                <img src="img/botol.png" alt="Botol Icon">
-                Botol Plastik
-            </div>
-            <div class="weight-input-group">
-                <input type="number" class="weight-input" value="0" min="0" data-type="botol">
-                <span>kg</span>
-            </div>
-        </div>
+            <input type="file" id="myFile" name="filename" accept="image/*" onchange="handleFileUpload(event)" style="display:none;">
 
-        <div class="result">
-            <p id="total-coins">Total Koin: 0</p>
-        </div>
+            <script>
+                function handleFileUpload(event) {
+                    const file = event.target.files[0];
+                    const preview = document.getElementById('preview');
+                    const uploadText = document.getElementById('upload-text');
+                    const uploadInstruction = document.getElementById('upload-instruction');
 
-        <div class="upload-container" onclick="document.getElementById('myFile').click();">
-            <div id="upload-text">+</div>
-            <div id="upload-instruction">Upload foto sampahmu disini</div>
-            <img id="preview" class="preview-image" alt="Pratinjau Gambar" style="display:none;">
-        </div>
-
-        <input type="file" id="myFile" name="filename" accept="image/*" onchange="handleFileUpload(event)" style="display:none;">
-
-        <script>
-            function handleFileUpload(event) {
-                const file = event.target.files[0];
-                const preview = document.getElementById('preview');
-                const uploadText = document.getElementById('upload-text');
-                const uploadInstruction = document.getElementById('upload-instruction');
-
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(e) {
-                        preview.src = e.target.result;
-                        preview.style.display = "block";
-                        uploadText.style.display = "none";
-                        uploadInstruction.style.display = "none";
+                    if (file) {
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            preview.src = e.target.result;
+                            preview.style.display = "block";
+                            uploadText.style.display = "none";
+                            uploadInstruction.style.display = "none";
+                        }
+                        reader.readAsDataURL(file);
                     }
-                    reader.readAsDataURL(file);
                 }
-            }
-        </script>
+            </script>
 
-        <div class="info-row">
-            <div class="info-box">
-                <div class="info-title">Alamat Penjemputan</div>
-                <div class="info-details">Bryan Bagaskara</div>
-                <div class="info-details">082209785456</div>
-                <div class="info-details">Kencana Loka, Jl. Ahmad Yani, Blok A7 No. 10</div>
+            <div class="info-row">
+                <div class="info-box">
+                    <div class="info-details">{{ Auth::user()->name }}</div>
+                    <div class="info-details">{{ Auth::user()->phone }}</div>
+                    <div class="info-details">{{ Auth::user()->address }}</div>
+                </div>
+
+                <div class="info-box">
+                    <div class="info-title">Tanggal Penjemputan</div>
+                    <div class="info-details">
+                        <input type="date" id="tanggal-penjemputan" name="tanggal-penjemputan" class="form-control" required>
+                    </div>
+                    <div class="info-title mt-3">Waktu Penjemputan</div>
+                    <div class="info-details">
+                        <input type="time" id="waktu-penjemputan" name="waktu-penjemputan" class="form-control" required>
+                    </div>
+                </div>
             </div>
 
-            <div class="info-box">
-                <div class="info-title">Tanggal Penjemputan</div>
-                <div class="info-details">
-                    <input type="date" id="tanggal-penjemputan" name="tanggal-penjemputan" class="form-control">
-                </div>
-                <div class="info-title mt-3">Waktu Penjemputan</div>
-                <div class="info-details">
-                    <input type="time" id="waktu-penjemputan" name="waktu-penjemputan" class="form-control">
-                </div>
-            </div>
-        </div>
+            <hr>
 
-        <hr>
+            <button type="submit" class="btn confirm" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                Lanjutkan Transaksi
+            </button>
 
-        <button type="button" class="btn confirm" data-bs-toggle="modal" data-bs-target="#confirmationModal">
-            Lanjutkan Transaksi
-        </button>
-
-        <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style="border-radius: 12px;">
-                    <div class="modal-body text-center">
-                        <p class="fw-bold">Apakah anda yakin untuk melanjutkan transaksi?</p>
-                        <div class="d-flex justify-content-center gap-3 mt-3">
-                            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius:  8px; width: 100px;">Tidak</button>
-                            <button type="button" class="btn btn-success" style="border-radius: 8px; width: 100px;">Ya</button>
+            <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content" style="border-radius: 12px;">
+                        <div class="modal-body text-center">
+                            <p class="fw-bold">Apakah anda yakin untuk melanjutkan transaksi?</p>
+                            <div class="d-flex justify-content-center gap-3 mt-3">
+                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal" style="border-radius:  8px; width: 100px;">Tidak</button>
+                                <button type="submit" class="btn btn-success" style="border-radius: 8px; width: 100px;">Ya</button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-
+        </form>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>

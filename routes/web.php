@@ -3,10 +3,6 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\RegisterController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 
 // Route untuk menampilkan form registrasi
 Route::get('/register', function () {
@@ -33,14 +29,33 @@ Route::get('/daftar', function () {
 });
 
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// });
 
-Route::get('/pickup', function () {
-    return view('pickup');
+use App\Http\Controllers\PickupController;
+
+Route::get('/pickup', [PickupController::class, 'index'])->name('pickup')->middleware('auth');
+Route::post('/pickup/store', [PickupController::class, 'store'])->name('pickup.store')->middleware('auth');
+
+Route::get('/', function () {
+    return view('tentangKami');
 });
 
-Route::get('/dropoff', function () {
-    return view('dropoff');
+Route::get('/mitra', function () {
+    return view('mitra');
 });
+
+Route::get('/layanan', function () {
+    return view('layanan');
+});
+
+// routes/web.php
+
+use App\Http\Controllers\DropoffController;
+
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout')->middleware('auth');
+
+
+Route::get('/dropoff', [DropoffController::class, 'tampil'])->name('dropoff')->middleware('auth');
+Route::post('/dropoff/submit', [DropoffController::class, 'submit'])->name('dropoff.submit')->middleware('auth');
+
+Route::get('/admin/dropoff', [DropoffController::class, 'adminDropoff'])->name('admin.dropoff')->middleware('auth');
+Route::put('/admin/dropoff/{id}/update-status', [DropoffController::class, 'updateStatus'])->name('dropoff.updateStatus')->middleware('auth');
