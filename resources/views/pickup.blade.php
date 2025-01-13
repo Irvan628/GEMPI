@@ -184,7 +184,7 @@
             <img src="img/user.png" alt="User Icon" class="h-12 w-12">
             <div>
                 <p class="text-black font-bold">{{ Auth::user()->name }}</p>
-                <button class="text-sm  text-black active:text-green-500 hover:underline" onclick="window.location.href='{{ url('akun-setting') }}'">Akun dan Setting</button>
+                
             </div>
         </div>
     </div>
